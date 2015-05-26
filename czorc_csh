@@ -1,0 +1,4 @@
+setenv	GISBASE	/unsupported/czo/grass-6.4.4
+setenv	PATH	/unsupported/czo/bin:${GISBASE}/bin:${GISBASE}/scripts:${PATH}
+setenv	PYTHONPATH	/unsupported/czo/lib/python2.7/site-packages:/unsupported/czo/lib/python2.6/site-packages:
+setenv	LD_LIBRARY_PATH	/unsupported/czo/lib:${GISBASE}/lib
