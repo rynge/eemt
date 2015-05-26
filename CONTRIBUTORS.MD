@@ -1,5 +1,5 @@
 # Contributors
-These scripts were written by the students of Applied Cyberinfrastructure Concepts, at The University of Arizona in Fall 2014.
+These scripts were written by the students of Applied Cyberinfrastructure Concepts (ISTA 420/520), at The University of Arizona in Fall 2014. {url} https://pods.iplantcollaborative.org/wiki/display/ACIC/Class+Flyer {url}
 
 Instructors
 =========================================================
