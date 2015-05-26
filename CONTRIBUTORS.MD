@@ -1,10 +1,13 @@
 These scripts were written by the students of Applied Cyberinfrastructure Concepts, 
 at The University of Arizona in Fall 2014.
+=========================================================
 
-Instructors:
+Instructors
+=========================================================
 Nirav Merchant, Eric Lyons
-=========================================================  
+
 Student Contributors:
+=========================================================
 Nicholas Callahan 
 Kent Guerriero
 Daniel Spence
@@ -22,8 +25,9 @@ Tomek Stawicki
 Brayden Streeter  
 Yun Wang
 Wenli Zhang
-=========================================================  
+
 Conceptualized by
+=========================================================
 Tyson L Swetnam
 Craig. Rasmussen
 Jon D. Pelletier
