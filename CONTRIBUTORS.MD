@@ -1,5 +1,5 @@
 These scripts were written by the students of Applied Cyberinfrastructure Concepts, at The University of Arizona in Fall 2014.
-____
++++
 
 Instructors
 =========================================================
@@ -29,4 +29,4 @@ Conceptualized by
 =========================================================
 Tyson L. Swetnam,
 Craig. Rasmussen,
-Jon D. Pelletier,
+Jon D. Pelletier
