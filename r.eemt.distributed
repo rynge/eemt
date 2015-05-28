@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
-""
+"""
 r.eemt.distributed - creates the necessary input layers for generating EEMT-Traditional and EEMT-Topographic by
 Rasmussen et al. (2015) Quantifying Topographic and Vegetation Effects on the Transfer of Energy and Mass to the Critical Zone. doi:10.2136/vzj2014.07.0102  
 
@@ -18,7 +18,7 @@ Copyright (C) 2015  NR Callahan & TL Swetnam
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-""
+"""
 
 MONTHS=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 MONTH_DAYS=[[1,31],[32,59],[60,90],[91,120],[121,150],[152,181],[182,212],[213,243],[244,273],[274,304],[305,334],[335,365]]
