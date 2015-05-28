@@ -1,15 +1,24 @@
 #!/usr/bin/env python
 from __future__ import print_function
+""
+r.eemt.distributed - creates the necessary input layers for generating EEMT-Traditional and EEMT-Topographic by
+Rasmussen et al. (2015) Quantifying Topographic and Vegetation Effects on the Transfer of Energy and Mass to the Critical Zone. doi:10.2136/vzj2014.07.0102  
 
-# r.eemt.distributed - creates the necessary input layers for generating EEMT-Traditional and EEMT-Topographic by
-# Rasmussen et al. (2015) Quantifying Topographic and Vegetation Effects on the Transfer of Energy and Mass to the Critical Zone. doi:10.2136/vzj2014.07.0102  
-# Programming by N R Callahan and T L Swetnam @ The University of Arizona, Tucson, Arizona
-# Inquiries about this code, email T L Swetnam: tswetnam@email.arizona.edu
-# Copyright (c) 2015 - The University of Arizona
-# This software is distributed under the GNU General Public License
-# See the file XXXX for details
-# This program uses Work Queue.
+Inquiries about this code, email T L Swetnam: tswetnam@email.arizona.edu
 
+Copyright (C) 2015  NR Callahan & TL Swetnam
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+""
 
 MONTHS=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 MONTH_DAYS=[[1,31],[32,59],[60,90],[91,120],[121,150],[152,181],[182,212],[213,243],[244,273],[274,304],[305,334],[335,365]]
