@@ -3,17 +3,24 @@
 from __future__ import print_function
 
 """
-r.series.distributed:  This program was written by N R Callahan in Spring 2015. 
-See manual pages for details.
-(C) 2014 Copywrite N R Callahan, University of Arizona, Tucson, Arizona
-email: nicholas.r.callahan@gmail.com
+r.series.distributed: summarizes the outputs of r.sun.distributed
+Inquiries about this code, email TL Swetnam: tswetnam@email.arizona.edu
+Copyright (C) 2015  NR Callahan & TL Swetnam
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-"""
-INSERT LICENSE HERE
-"""
-
-
+print("r.series.distributed: summarizes the outputs of r.sun.distributed")  
+print("Copyright (C) 2015  NR Callahan & TL Swetnam")
+print("This program comes with ABSOLUTELY NO WARRANTY")
+print("This is free software, and you are welcome to redistribute it under certain conditions")
 
 #Globals
 MONTHS=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
