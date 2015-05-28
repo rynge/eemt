@@ -1,14 +1,32 @@
 #!/usr/bin/env python
 from __future__ import print_function
-"""
-r.sun.distributed:  This program was written by N R Callahan in Spring 2015. 
-See manual pages for details.
-(C) 2014 Copywrite N R Callahan, University of Arizona, Tucson, Arizona
-email: nicholas.r.callahan@gmail.com
-"""
+
+## r.sun.distributed: this script generates daily solar radiation models using GRASS r.sun. The process is
+## distributed to run across the University of Arizona HPC system.
+## Programming by N R Callahan and T L Swetnam @ The University of Arizona, Tucson, Arizona
+## Inquiries about this code, email T L Swetnam: tswetnam@email.arizona.edu
+## Copyright (c) 2015 - The University of Arizona
+## This software is distributed under the GNU General Public License
+## See the file XXXX for details
+## This program uses Work Queue.
+
 
 """
-INSERT LICENSE HERE
+  r.sun.distributed: intended to generate daily solar radiation models using GRASS r.sun (http://grass.osgeo.org/) 
+  Copyright (C) 2015  NR Callahan & TL Swetnam
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
