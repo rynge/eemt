@@ -28,8 +28,9 @@ from __future__ import print_function
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-
+print("r.sun.distributed: intended to generate daily solar radiation models using GRASS r.sun (http://grass.osgeo.org/)")  
+print("Copyright (C) 2015  NR Callahan & TL Swetnam")
+print("This program comes with ABSOLUTELY NO WARRANTY")
 
 #Default printing functions
 def error(*objs):
