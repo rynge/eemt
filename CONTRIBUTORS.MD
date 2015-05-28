@@ -5,7 +5,7 @@ Instructors
 =========================================================
 Nirav Merchant, Eric Lyons
 
-Student Contributors:
+Student Contributors
 =========================================================
 Nicholas Callahan, 
 Kent Guerriero,
