@@ -91,7 +91,9 @@ INTERVAL=1
 ###############################################################################
 #module load unsupported
 #module load czo/sol/0.0.1
-source /unsupported/czo/czorc
+if [ -e /unsupported/czo/czorc ]; then
+    source /unsupported/czo/czorc
+fi
 
 echo "Running r.sun for day $DAY"
 echo "DEM: $DEM"
