@@ -112,8 +112,9 @@ r.slope.aspect elevation=dem slope=slope_dec aspect=aspect_dec
 echo "Creating Flat Map"
 r.mapcalc "zeros=if(dem>0,0,null())"
 echo "Running r.sun on Flat Map"
+#Using dem and flat slope and aspect, generate a global insolation model with local shading off
 r.sun elevin=dem aspin=zeros slopein=zeros day=$DAY step=$STEPSIZE dist=$INTERVAL glob_rad=flat_total_sun
-#Using dem and calculated slope and aspect, generate a solar insulation model
+#Using dem and slope and aspect (decimal degrees), generate a global insolation model with local shading effects on
 echo "Running r.sun using dem, aspect, slope"
 r.sun -s elevin=dem aspin=aspect_dec slopein=slope_dec day=$DAY step=$STEPSIZE dist=$INTERVAL insol_time=hours_sun glob_rad=total_sun
 #Output files
