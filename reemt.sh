@@ -152,15 +152,16 @@ r.mapcalc "PET = 2.1*((hours_sun/12)^2)*vp_s/((tmax_loc+tmin_loc)/2)"
 echo "#Calculating local Solar Insolation in joules"
 r.mapcalc "total_sun_joules = total_sun*3600"
 
-#Locally Corrected Temperature (accounting for Solar Insolation)
-echo "#Calculating locally corrected Temperature (accounting for Solar Insolation)"
+#Locally Corrected Temperature (modified by global solar radiation)
+echo "#Calculating locally corrected min and max temperature (max is modified by global solar radiation)"
 r.mapcalc "S_i = total_sun/flat_total_sun"
-r.mapcalc "tmin_topo = tmin_loc+(S_i-(1/S_i))"
+r.mapcalc "tmin_topo = tmin_loc"
 r.mapcalc "tmax_topo = tmax_loc+(S_i-(1/S_i))"
 
-#Local Water Balance (accounting for topographic water redistribution)
+#Local Water Balance (accounting for topographic redistribution of run-off)
 echo "Calculating Local Water Balance"
-r.mapcalc "a_i = twi/((max(twi)+min(twi))/2)"
+r.average "base=twi cover=zeros output=mean_twi"
+r.mapcalc "a_i = twi/mean_twi"
 
 #Potential Evapotranspiration for EEMT-Topo
 echo "Potential Evapotranspiration EEMT-Topo"
