@@ -11,7 +11,7 @@
 ###gdal_merge.py
 ####Module to extract data from many rasters into one output, Author: Frank Warmerdam
 ###parser.py
-####Reads DEM.tif file info via gdalinfo command, determines the projection zone and region of the .tif, convertsto DAYMET projection
+####Reads DEM.tif file info via gdalinfo command, determines the projection zone and region of the .tif, converts to DAYMET projection
 ###process_dem.py
 ####Example scripts, not implemented yet. 
 ###read_meta.py
@@ -27,7 +27,7 @@
 
 ##Shell (.sh) files
 ###iget_daymet.sh
-####Shell file for calling the monhtly averaged DAYMET data from the iPlant Datastore 
+####Shell file for calling the monthly averaged DAYMET data from the iPlant Datastore 
 ###install_dep.sh
 ####List of all dependencies with installation commands
 ###r.eemt.sh
@@ -41,6 +41,6 @@
 ###r.eemt.distributed
 ####WorkQueue master for generating EEMT, executes using all of the shell files in the repository 
 ###r.series.distributed
-####Workqueue master for calculating the r.sun statistics with rmean.sh
+####WorkQueue master for calculating the r.sun statistics with rmean.sh
 ###r.sun.distributed
 ####WorkQueue master for calculating daily solar radiation. 
