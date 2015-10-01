@@ -238,13 +238,13 @@ def createTWI(warped_tif,proj_dir):
     print(sacd)
     process=Popen(sacd,shell=True)
     process.communicate()
-##--Run Catchment Area http://www.saga-gis.org/saga_module_doc/2.1.4/ta_hydrology_1.html
-    catcha = "saga_cmd ta_hydrology 1 -ELEVATION " + dem_grid + ".sgrd -CAREA " + catchment_grid
+##--Run Catchment Area with d-infinity [-METHOD 2] http://www.saga-gis.org/saga_module_doc/2.1.4/ta_hydrology_1.html
+    catcha = "saga_cmd ta_hydrology 1 -ELEVATION " + dem_grid + ".sgrd -CAREA " + catchment_grid " -METHOD 2"
     print(catcha)
     process=Popen(catcha,shell=True)
     process.communicate()
-##--Run Topographical Wetness Index http://www.saga-gis.org/saga_module_doc/2.1.4/ta_hydrology_20.html
-    twi="saga_cmd ta_hydrology 20 -SLOPE " + slope_grid_rad + ".sgrd -AREA " + catchment_grid + ".sgrd -TWI " + twi_grid
+##--Run SAGA Wetness Index http://www.saga-gis.org/saga_module_doc/2.1.3/ta_hydrology_15.html
+    twi="saga_cmd ta_hydrology 15 -DEM " + dem_grid + ".srgd -SLOPE " + slope_grid_rad + ".sgrd -AREA " + catchment_grid + ".sgrd -TWI " + twi_grid
     print(twi)
     process=Popen(twi,shell=True)
     process.communicate()
