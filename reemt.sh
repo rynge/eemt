@@ -140,13 +140,14 @@ r.mapcalc "tmin_loc = tmin-0.00649*(dem_10m-dem_1km)"
 r.mapcalc "tmax_loc = tmax-0.00649*(dem_10m-dem_1km)"
 
 
-#Local Potential Evapotranspiration for EEMT-Trad
-echo "Calculating local Potential Evapotranspiration for EEMT-Trad"
+# Local Potential Evapotranspiration for EEMT-Trad
+# See Rasmussen et al. 2015 Supplemental 1: https://dl.sciencesocieties.org/publications/vzj/abstracts/0/0/vzj2014.07.0102
+echo "Calculating local Potential Evaporation-Transpiration (PET) for EEMT-Trad using Hamon's Equation"
 
-r.mapcalc "f_tmin_loc = 6.108*exp((17.27*tmin_loc)/(tmin_loc+273.3))"
-r.mapcalc "f_tmax_loc = 6.108*exp((17.27*tmax_loc)/(tmax_loc+273.3))"
+r.mapcalc "f_tmin_loc = 6.108*exp((17.27*tmin_loc)/(tmin_loc+237.3))"
+r.mapcalc "f_tmax_loc = 6.108*exp((17.27*tmax_loc)/(tmax_loc+237.3))"
 r.mapcalc "vp_s = (f_tmax_loc+f_tmin_loc)/2"
-r.mapcalc "PET = 2.1*((hours_sun/12)^2)*vp_s/((tmax_loc+tmin_loc)/2)"
+r.mapcalc "PET = 2.1*((hours_sun/12)^2)*vp_s/(((tmax_loc+tmin_loc)/2)+273.3)"
 
 #Local Solar Insolation
 echo "#Calculating local Solar Insolation in joules"
