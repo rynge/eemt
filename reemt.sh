@@ -164,8 +164,8 @@ echo "Calculating Local Water Balance"
 r.average "base=twi cover=zeros output=mean_twi"
 r.mapcalc "a_i = twi/mean_twi"
 
-#Potential Evapotranspiration for EEMT-Topo
-echo "Potential Evapotranspiration EEMT-Topo"
+#Potential Evapotranspiration for EEMT-Topo using Penman-Monteith 
+echo "Potential Evapotranspiration EEMT-Topo using the Penman-Monteith Equation"
 r.mapcalc "g_psy = 0.001013*(101.*((293-0.00649*dem_10m)/293)^5.26)"
 r.mapcalc "m_vp = 0.04145*exp(0.06088*(tmax_topo+tmin_topo/2))"
 r.mapcalc "ra = (4.72*(log(2/0.00137))*2)/(1+0.536*5)"
