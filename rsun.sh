@@ -37,9 +37,16 @@ WORKING_DIR=$RANDOM
 LOCATION=${DIRECTORY}/sol_data/tmp_${WORKING_DIR}/PERMANENT
 GRASSRC=${DIRECTORY}/.grassrc_${WORKING_DIR}
 export GISRC=${GRASSRC}
+
+export GRASS_VERBOSE=0
+
 ###############################################################################
 #OPTIONS PARSED => START SETUP
 ###############################################################################
+
+echo
+echo "Caclculating for day $DAY"
+
 #Create output structure
 if [ ! -e ./global ]; then
 mkdir -p global/daily
@@ -89,8 +96,6 @@ INTERVAL=1
 ###############################################################################
 #SETUP COMPLETE => START GRASS OPERATIONS
 ###############################################################################
-#module load unsupported
-#module load czo/sol/0.0.1
 if [ -e /unsupported/czo/czorc ]; then
     source /unsupported/czo/czorc
 fi
@@ -133,3 +138,4 @@ r.out.gdal createopt="COMPRESS=LZW" -c input=hours_sun output=./insol/daily/hour
 ###############################################################################
 rm -rf ${DIRECTORY}/sol_data/tmp_${WORKING_DIR}/
 rm $GRASSRC
+

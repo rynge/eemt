@@ -1,8 +1,10 @@
 #!/bin/bash
 
-module load unsupported
-module load czo/sol/0.0.1
-source /unsuported/czo/czorc
+if [ -e /unsupported/czo/czorc ]; then
+    module load unsupported
+    module load czo/sol/0.0.1
+    source /unsuported/czo/czorc
+fi
 
 #Read options
 ARGS=`getopt -o D: --long directory: -n 'rmean.sh' -- "$@"`
@@ -104,16 +106,18 @@ g.mremove -f "*"
 echo "IMPORTING"
 #Need to grab and import every tif
 while (( "$#" )); do
-    echo $1 > temp
-    NAME=`cut -d'.' -f2 temp`
-    echo $NAME > temp
-    NAME=`cut -d'/' -f5 temp`
+    #echo $1 > temp
+    #NAME=`cut -d'.' -f2 temp`
+    #echo $NAME > temp
+    #NAME=`cut -d'/' -f5 temp`
+    NAME=`echo $1 | sed 's;.*/;;' | sed 's;\..*;;'`
+
     echo "IMPORTING UNDER NAME: $NAME for Argument $1"
 
     r.in.gdal input=$1 output=$NAME
     shift
 done
-rm temp
+rm -f temp
 
 g.region -s rast=$NAME
 
