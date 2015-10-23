@@ -1,7 +1,9 @@
 #!/bin/bash
 
 set -e
-source /unsupported/czo/czorc
+if [ -e /unsupported/czo/czorc ]; then
+    source /unsupported/czo/czorc
+fi
 
 #Input Files
 DIRECTORY=$1
@@ -38,11 +40,17 @@ echo "Flat_Sun: $FLAT_SUN"
 echo "Slope: $SLOPE_RAD"
 echo "Aspect: $ASPECT_RAD"
 echo "================================================================================"
+
+# expand directory
+DIRECTORY=`cd $DIRECTORY && pwd`
+
 WORKING_DIR=$RANDOM 
 LOCATION=${DIRECTORY}/sol_data/tmp_${WORKING_DIR}/PERMANENT
 GRASSRC=${DIRECTORY}/.grassrc_${WORKING_DIR}
 
 export GISRC=${GRASSRC}
+
+export GRASS_VERBOSE=0
 
 ###############################################################################
 #START GRASS SETUP
@@ -212,7 +220,7 @@ r.mapcalc "E_ppt_topo =F*4185.5*DT*E_bio_topo"
 echo "Calculating EEMT_topo"
 r.mapcalc "EEMT_Topo = E_ppt_topo + E_bio_topo"
 
-
+mkdir -p ${DIRECTORY}/eemt
 r.out.gdal -c createopt="BIGTIFF=IF_SAFER,COMPRESS=LZW" input=EEMT_Topo output=${DIRECTORY}/eemt/EEMT_Topo_${MONTH}_${YEAR}.tif
 r.out.gdal -c createopt="BIGTIFF=IF_SAFER,COMPRESS=LZW" input=EEMT_Trad output=${DIRECTORY}/eemt/EEMT_Trad_${MONTH}_${YEAR}.tif
 

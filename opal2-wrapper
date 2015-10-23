@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# This script starts up a local EEMT instance, and uses SSH to
+# submit workers on the OSG system.
+
+set -e
+
+# settings
+LOCAL_WORK_DIR=/home/eemt/runs
+LOCAL_EEMT_INSTALL=/home/eemt/git/eemt
+REMOTE_USER=eemtdemo
+REMOTE_PROJECT_NAME=OSG-Staff
+export TCP_LOW_PORT=20000
+export TCP_HIGH_PORT=60000 
+
+# arguments
+DEM=$1
+DAYS=$2
+
+# make the local work dir a unique one
+RUN_ID=`/bin/date +'%F_%H%M%S'`
+LOCAL_WORK_DIR=$LOCAL_WORK_DIR/$RUN_ID
+mkdir -p $LOCAL_WORK_DIR
+
+cd $LOCAL_EEMT_INSTALL
+
+scp submit_osg_workers.sh $REMOTE_USER@xd-login.opensciencegrid.org:
+ssh $REMOTE_USER@xd-login.opensciencegrid.org "./submit_osg_workers.sh $REMOTE_PROJECT_NAME EEMT_OPAL2"
+
+# run the workflow
+./run-workflow \
+  --name EEMT_OPAL2 \
+  --start-year 1980 \
+  --end-year 1980 \
+  -O $LOCAL_WORK_DIR \
+   $DEM
+
+echo
+echo "Output files in $LOCAL_WORK_DIR"
+echo
+

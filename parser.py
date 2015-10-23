@@ -36,7 +36,7 @@ class TiffParser(object):
         """ Read dem file info via gdalinfo command."""
 			
 	# store file name
-	self.fileName = tiffFile.split('.tif')[0]
+	self.fileName = os.path.basename(tiffFile.split('.tif')[0])
 			
 	# initialize daymetR package
 
