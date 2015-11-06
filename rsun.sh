@@ -45,7 +45,7 @@ export GRASS_VERBOSE=0
 ###############################################################################
 
 echo
-echo "Caclculating for day $DAY"
+echo "Calculating for day $DAY"
 
 #Create output structure
 if [ ! -e ./global ]; then
@@ -109,7 +109,7 @@ g.mremove -f "*"
 echo "Importing DEM"
 r.in.gdal input=$DEM output=dem
 #Set Region
-g.region -sa rast=dem res=10
+g.region -sa rast=dem
 #Calculate Slope and Aspect
 echo "Running r.slope.aspect"
 r.slope.aspect elevation=dem slope=slope_dec aspect=aspect_dec
