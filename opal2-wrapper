@@ -28,6 +28,8 @@ scp submit_osg_workers.sh $REMOTE_USER@xd-login.opensciencegrid.org:
 ssh $REMOTE_USER@xd-login.opensciencegrid.org "./submit_osg_workers.sh $REMOTE_PROJECT_NAME EEMT_OPAL2"
 
 # run the workflow
+# for start-year the DAYMET average is year 0000, the time series data are from 1980 to 2012,
+# to start and end in a single year use the same year
 ./run-workflow \
   --name EEMT_OPAL2 \
   --start-year 1980 \

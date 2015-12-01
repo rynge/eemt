@@ -58,13 +58,13 @@ class Tiff:
                 self.projCoords.append((match.group(1), match.group(2)))
                 lat = 0.0
                 lon = 0.0
-                # caculate lon & lat in decimal degrees
+                # caculate latitude and longitude in decimal degrees
                 for j in range(3):
                     lon -= float(match.group(j + 3)) / pow(60, j)
                     lat += float(match.group(j + 6)) / pow(60, j)
                 self.deciCoords.append((lat, lon))
                 
-                # upper left is three lines above
+                # upper left coordinate is three lines above
                 match = ulCoords.search(output[i-3])
                 self.projCoords.append((match.group(1), match.group(2)))
                 lat = 0.0
@@ -84,6 +84,7 @@ class Tiff:
         ulLon = self.stLon + floor((ulLon - self.stLon) / 2) * 2
         lrLat = self.stLat + floor((lrLat - self.stLat) / 2) * 2
         lrLon = self.stLon + floor((lrLon - self.stLon) / 2) * 2
+        
         ulTile = int(self.stTile + ((ulLat - self.stLat) / 2) * 180 + (ulLon - self.stLon) / 2)
         self.DAYMET_tile.append(ulTile)
         lrTile = int(self.stTile + ((lrLat - self.stLat) / 2) * 180 + (lrLon - self.stLon) / 2)
