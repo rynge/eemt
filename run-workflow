@@ -48,53 +48,6 @@ script_location = os.path.abspath(os.path.dirname(sys.argv[0]))
 na_dem_location = script_location + "/DAYMET/NA_DEM/na_dem.tif"
 
 
-def rsun_tasks(makeflow, proj_dir, days, dem):
-    tasks=0
-    ##--Paths for input files
-    for day in days:
-        makeflow += "\n"
-        makeflow += "global/daily/flat_total_sun_day_%d.tif global/daily/total_sun_day_%d.tif insol/daily/hours_sun_day_%d.tif : rsun.sh %s\n" %(day, day, day, dem)
-        makeflow += "\t/bin/bash rsun.sh %s -d %d -D .\n" % (dem, day)
-        tasks=tasks+1
-    return makeflow, tasks
-
-
-def monthly_averages(makeflow, proj_dir, dem):
-    i = 0
-    for month in MONTHS:
-        start_day = MONTH_DAYS[i][0] 
-        end_day   =  MONTH_DAYS[i][1]
-        
-        global_inputs = ""
-        insol_inputs  = ""
-        flat_inputs   = ""
-        outputs = ""
-
-        for day in range(start_day,end_day+1):
-            global_inputs=global_inputs + " global/daily/total_sun_day_%d.tif" % (day)
-            insol_inputs=insol_inputs + " insol/daily/hours_sun_day_%d.tif" % (day)
-            flat_inputs=flat_inputs+" global/daily/flat_total_sun_day_%d.tif" % (day)
-
-        outputs = "global/monthly/total_sun_%s_sum.tif" % month \
-                + " insol/monthly/hours_sun_%s_sum.tif" % month \
-                + " global/monthly/flat_total_sun_%s.tif" % month \
-                + " global/monthly/total_sun_%s_average.tif" % month \
-                + " insol/monthly/hours_sun_%s_average.tif" % month \
-                + " global/monthly/total_sun_%s_median.tif" % month \
-                + " insol/monthly/hours_sun_%s_median.tif" % month \
-                + " global/monthly/total_sun_%s_stddev.tif" % month \
-                + " insol/monthly/hours_sun_%s_stddev.tif" % month \
-                + " global/monthly/total_sun_%s_variance.tif" % month \
-                + " insol/monthly/hours_sun_%s_variance.tif" % month
-
-        makeflow += "\n"
-        makeflow += "%s: rmean.sh %s %s %s %s\n" %(outputs, dem, global_inputs, insol_inputs, flat_inputs)
-        makeflow += "\t./rmean.sh %s -D . %s %s %s %s\n" % (month, dem, global_inputs, insol_inputs, flat_inputs)
-
-        i = i+1
-    return makeflow, i
-
-
 def eemt_tasks(makeflow,proj_dir,syear,eyear,dem):
     tasks = 0
     reemt = os.path.join(script_location,"reemt.sh")
@@ -102,9 +55,9 @@ def eemt_tasks(makeflow,proj_dir,syear,eyear,dem):
         for month in MONTHS:
             eemt_topo = "eemt/EEMT_Topo_%s_%d.tif" % (month,year)
             eemt_trad = "eemt/EEMT_Trad_%s_%d.tif" % (month,year)
-            total_sun = "global/monthly/total_sun_%s_average.tif" % month
+            total_sun = "global/monthly/total_sun_%s_sum.tif" % month
             hours_sun = "insol/monthly/hours_sun_%s_average.tif" % month
-            flat_sun = "global/monthly/flat_total_sun_%s.tif" % month
+            flat_sun = "global/monthly/flat_total_sun_%s_sum.tif" % month
             slope = "slope_rad.tif"
             aspect= "aspect_rad.tif"
             tmin = "daymet/tmin/tmin_%d_%s_local.tif" % (year,month)
@@ -144,12 +97,13 @@ def create_project_directories(proj_dir):
         os.makedirs(os.path.join(proj_dir,"daymet"))
         os.makedirs(os.path.join(proj_dir,"daymet/tmin"))
         os.makedirs(os.path.join(proj_dir,"daymet/tmax"))
-        os.makedirs(os.path.join(proj_dir,"daymet/swe"))
         os.makedirs(os.path.join(proj_dir,"daymet/prcp"))
         os.makedirs(os.path.join(proj_dir,"daymet/vp"))
-        os.makedirs(os.path.join(proj_dir,"daymet/dayl"))
-        os.makedirs(os.path.join(proj_dir,"daymet/srad"))
-        os.makedirs(os.path.join(proj_dir,"daymet/twi"))
+        #Currently we are not using DAYMET SWE, DAYL, or SRAD data but we are maintaining these for future incorporation.
+        #os.makedirs(os.path.join(proj_dir,"daymet/swe"))
+        #os.makedirs(os.path.join(proj_dir,"daymet/dayl"))
+        #os.makedirs(os.path.join(proj_dir,"daymet/srad"))
+        #os.makedirs(os.path.join(proj_dir,"daymet/twi"))
 
 
 def main():
@@ -199,7 +153,7 @@ def main():
     start=datetime.datetime.now()
     print("Started at: ",start.strftime("%d%b %H:%M"))
 
-##--Creete project directory structure
+##--Create project directory structure
     create_project_directories(proj_dir)
 
     # the actual workflow definition
@@ -224,7 +178,7 @@ def main():
 
     ##--Get DAYMET Data for given years
     for extra_file in ["NA_DEM/na_dem.tif"]:
-        url = os.path.join("http://workflow.isi.edu/scratch/rynge/DAYMET", extra_file)
+        url = os.path.join("http://xd-login.opensciencegrid.org/scratch/eemtdemo/DAYMET", extra_file)
         extra_dir = os.path.dirname(extra_file)
         makeflow += "\n"
         makeflow += "daymet/%s: \n" %(extra_file)
@@ -233,7 +187,7 @@ def main():
     for year in range(start_year,end_year+1):
         for param in PARAMS:
             for month in MONTHS:
-                url = os.path.join("http://workflow.isi.edu/scratch/rynge/DAYMET",param+"_allyrs",param+"_"+str(year)+"_"+month+".tif")
+                url = os.path.join("http://xd-login.opensciencegrid.org/scratch/eemtdemo/DAYMET",param,param+"_"+str(year)+"_"+month+".tif")
                 makeflow += "\n"
                 makeflow += "daymet/%s/%s_%d_%s_local.tif: metget.sh\n" %(param, param, year, month)
                 makeflow += "\t/bin/bash metget.sh %s %f %f %f %f daymet/%s/%s_%d_%s_local.tif\n" %(url, ulx, uly, lrx, lry, param, param, year, month)
@@ -264,7 +218,51 @@ def main():
     process=Popen("makeflow --retry-count=3 --batch-type=wq --port=%d --project=%s workflow.mf" %(port, name), shell=True)
     process.communicate()
 
+def rsun_tasks(makeflow, proj_dir, days, dem):
+    tasks=0
+    ##--Paths for input files
+    for day in days:
+        makeflow += "\n"
+        makeflow += "global/daily/flat_total_sun_day_%d.tif global/daily/total_sun_day_%d.tif insol/daily/hours_sun_day_%d.tif : rsun.sh %s\n" %(day, day, day, dem)
+        makeflow += "\t/bin/bash rsun.sh %s -d %d -D .\n" % (dem, day)
+        tasks=tasks+1
+    return makeflow, tasks
 
+
+def monthly_averages(makeflow, proj_dir, dem):
+    i = 0
+    for month in MONTHS:
+        start_day = MONTH_DAYS[i][0] 
+        end_day   =  MONTH_DAYS[i][1]
+        
+        global_inputs = ""
+        insol_inputs  = ""
+        flat_inputs   = ""
+        outputs = ""
+
+        for day in range(start_day,end_day+1):
+            global_inputs=global_inputs + " global/daily/total_sun_day_%d.tif" % (day)
+            insol_inputs=insol_inputs + " insol/daily/hours_sun_day_%d.tif" % (day)
+            flat_inputs=flat_inputs + " global/daily/flat_total_sun_day_%d.tif" % (day)
+
+        outputs = " global/monthly/total_sun_%s_sum.tif" % month \
+                + " insol/monthly/hours_sun_%s_sum.tif" % month \
+                + " global/monthly/flat_total_sun_%s_sum.tif" % month \
+                + " global/monthly/total_sun_%s_average.tif" % month \
+                + " insol/monthly/hours_sun_%s_average.tif" % month \
+                + " global/monthly/total_sun_%s_median.tif" % month \
+                + " insol/monthly/hours_sun_%s_median.tif" % month \
+                + " global/monthly/total_sun_%s_stddev.tif" % month \
+                + " insol/monthly/hours_sun_%s_stddev.tif" % month \
+                + " global/monthly/total_sun_%s_variance.tif" % month \
+                + " insol/monthly/hours_sun_%s_variance.tif" % month \
+
+        makeflow += "\n"
+        makeflow += "%s: rmean.sh %s %s %s %s\n" %(outputs, dem, global_inputs, insol_inputs, flat_inputs)
+        makeflow += "\t./rmean.sh %s -D . %s %s %s %s\n" % (month, dem, global_inputs, insol_inputs, flat_inputs)
+
+        i = i+1
+    return makeflow, i
 
 if __name__ == '__main__':
     main()
