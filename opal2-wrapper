@@ -6,26 +6,22 @@
 set -e
 
 # settings
-LOCAL_WORK_DIR=/home/eemt/runs
+LOCAL_WORK_DIR=`pwd`
 LOCAL_EEMT_INSTALL=/home/eemt/git/eemt
-REMOTE_USER=eemtdemo
-REMOTE_PROJECT_NAME=OSG-Staff
 export TCP_LOW_PORT=20000
 export TCP_HIGH_PORT=60000 
+
+# safty check
+if [ -e run-workflow ]; then
+    echo "Do not run from the eemt checkout!"
+    exit 1
+fi
 
 # arguments
 DEM=$1
 DAYS=$2
 
-# make the local work dir a unique one
-RUN_ID=`/bin/date +'%F_%H%M%S'`
-LOCAL_WORK_DIR=$LOCAL_WORK_DIR/$RUN_ID
-mkdir -p $LOCAL_WORK_DIR
-
 cd $LOCAL_EEMT_INSTALL
-
-scp submit_osg_workers.sh $REMOTE_USER@xd-login.opensciencegrid.org:
-ssh $REMOTE_USER@xd-login.opensciencegrid.org "./submit_osg_workers.sh $REMOTE_PROJECT_NAME EEMT_OPAL2"
 
 # run the workflow
 # for start-year the DAYMET average is year 0000, the time series data are from 1980 to 2012,
@@ -35,7 +31,7 @@ ssh $REMOTE_USER@xd-login.opensciencegrid.org "./submit_osg_workers.sh $REMOTE_P
   --start-year 0000 \
   --end-year 0000 \
   -O $LOCAL_WORK_DIR \
-   $DEM
+   $LOCAL_WORK_DIR/$DEM
 
 echo
 echo "Output files in $LOCAL_WORK_DIR"

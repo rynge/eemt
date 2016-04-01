@@ -1,0 +1,95 @@
+#!/bin/bash
+
+COMET_USER=tswetnam
+COMET_PROJECT=uoa108
+
+# Script for submitting workers to SDSC Comet
+
+. /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/current/init/bash
+module load cctools
+
+for PROJECT in EEMT_Comet; do
+
+    WAITING=0
+    for VALUE in `work_queue_status | grep $PROJECT | awk '{print $4;}'`; do
+        WAITING=$(($WAITING + $VALUE))
+    done
+    
+    RUNNING=0
+    for VALUE in `work_queue_status | grep $PROJECT | awk '{print $5;}'`; do
+        RUNNING=$(($RUNNING + $VALUE))
+    done
+    
+    WORKERS=0
+    for VALUE in `work_queue_status | grep $PROJECT | awk '{print $7;}'`; do
+        WORKERS=$(($WORKERS + $VALUE))
+    done
+
+    echo "Waiting=$WAITING, Running=$RUNNING, Workers=$WORKERS"
+    
+    # any waiting tasks?
+    if [ $WAITING = 0 ]; then
+        echo "No tasks waiting"
+        continue
+    fi
+    
+    # max workers?
+    if [ $WORKERS -gt 3 ]; then
+        echo "Too many workers. "
+        continue
+    fi
+    
+    # start slow to make sure the system works
+    NEW_WORKER_NODES=1
+    
+    if [ $WAITING -gt 0 -a $RUNNING -gt 0 ]; then
+        NEW_WORKER_NODES=$WAITING
+    fi
+    
+    # limit the number of new workers to 10 per iteration
+    if [ $NEW_WORKER_NODES -gt 1 ]; then
+        NEW_WORKER_NODES=1
+    fi
+
+    # make sure we don't have pending workers on Comet
+    PENDING_WORKERS=`ssh $COMET_USER@comet.sdsc.edu "squeue -u $COMET_USER | grep -v JOBID | grep ' PD ' | wc -l "`
+    if [ $PENDING_WORKERS -gt 0 ]; then
+        continue
+    fi
+    
+    echo "Submitting $NEW_WORKERS new workers..."
+    
+    # keep logs on the scratch filesystem
+    WORK_DIR=/home/eemt/workers/work/comet-`/bin/date +'%F_%H%M%S'`
+    mkdir -p $WORK_DIR
+    cd $WORK_DIR
+    
+    # we need a wrapper to load modules
+    cat >sol-worker.submit <<EOF
+#!/bin/bash
+
+#SBATCH --job-name="sol"
+#SBATCH --output="job.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=$NEW_WORKER_NODES
+#SBATCH --ntasks-per-node=1
+#SBATCH --export=ALL
+#SBATCH -t 24:00:00
+#SBATCH -A $COMET_PROJECT
+
+export SLURM_NODEFILE=\`generate_pbs_nodefile\`
+
+#for HOST in \`cat \$SLURM_NODEFILE | sort -u\`; do
+#    ssh \$HOST "(. /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/current/init/bash ; module load cctools ; module load eemt ; work_queue_worker $PASSWORD -M $PROJECT -s /scratch/\$USER/\$SLURM_JOB_ID -t 600 --cores=0)" &
+#done
+
+. /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/current/init/bash ; module load cctools ; module load eemt ; work_queue_worker $PASSWORD -M $PROJECT -s /scratch/\$USER/\$SLURM_JOB_ID -t 600 --cores=0
+
+EOF
+    chmod 755 sol-worker.submit
+    ssh $COMET_USER@comet.sdsc.edu "mkdir -p ~/eemt-workers"
+    scp sol-worker.submit $COMET_USER@comet.sdsc.edu:~/eemt-workers
+    ssh $COMET_USER@comet.sdsc.edu "cd ~/eemt-workers && sbatch sol-worker.submit"
+
+done
+

@@ -176,6 +176,12 @@ def main():
 
     # create the full workflow - this means makeflow rules for all the compute steps
 
+    # needed for multicore slots
+    makeflow += "CATEGORY=\"analysis\"\n"
+    makeflow += "CORES=1\n"
+    #makeflow += "MEMORY=2000\n"
+    #makeflow += "DISK=10000\n"
+
     ##--Get DAYMET Data for given years
     for extra_file in ["NA_DEM/na_dem.tif"]:
         url = os.path.join("http://xd-login.opensciencegrid.org/scratch/eemtdemo/DAYMET", extra_file)
